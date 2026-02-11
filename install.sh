@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Claude Code Skills Installer — The Squad
-# Usage: curl -sL https://raw.githubusercontent.com/jacob-thesqd/claude-skills/main/install.sh | bash
+# Usage: curl -sL https://raw.githubusercontent.com/sis-thesqd/claude-skills/main/install.sh | bash
 
 set -e
 
-BASE_URL="https://raw.githubusercontent.com/jacob-thesqd/claude-skills/main/skills"
+BASE_URL="https://raw.githubusercontent.com/sis-thesqd/claude-skills/main/skills"
 DEST="$HOME/.claude/commands"
 
 # List of all skills to install
