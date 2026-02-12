@@ -522,4 +522,49 @@ Every instance where a client-side component calls an external API directly inst
 This is your action plan. Start at the top and work your way down.
 
 ### 🟢 Quick Wins (< 5 minutes each)
-1
+1. [fix description with file path]
+2. ...
+
+### 🟡 Medium Effort (15–60 minutes each)
+1. [fix description with file path]
+2. ...
+
+### 🔴 Major Refactors (1+ hours each)
+1. [fix description with file path]
+2. ...
+```
+
+## Report Delivery
+
+1. **Create the `squadits` directory** at the project root (`[PROJECT_PATH]/squadits/`) if it doesn't already exist.
+2. **Determine the next audit number** by checking existing files in the `squadits` directory. Look for files matching the pattern `audit-[N].md` (e.g., `audit-1.md`, `audit-2.md`). The new audit should use the next available number. If the directory is empty or new, start with `audit-1.md`.
+3. **Save the Markdown report** to `[PROJECT_PATH]/squadits/audit-[N].md` (e.g., `squadits/audit-1.md`, `squadits/audit-2.md`, etc.).
+4. Print the full report to stdout so the user can read it immediately.
+5. At the end, print a short summary: overall grade, biggest win, biggest risk, and the file path where the report was saved.
+
+---
+
+## Execution Instructions
+
+When running this audit, follow this order:
+
+1. **Interview phase**: Conduct the 3-round interactive interview. Do NOT proceed until the user has answered all rounds. Compile answers into `INTERVIEW_CONTEXT`.
+2. **UI Library inventory phase**: If a UI library is confirmed, build the component map and scan for custom duplicates.
+3. **History phase**: Check for previous audits in `squadits/` directory. Parse grades from the most recent audit to use as comparison baseline.
+4. **Discovery phase**: Detect monorepo, count files/lines (excluding any user-specified skip paths). Report estimate, mention how many previous audits were found, and ask to continue.
+5. **Read phase**: Read all relevant source files systematically. Start with the project structure (directory listing), then read files grouped by category relevance.
+6. **Analysis phase**: For each category, collect findings and assign a grade. Always reference `INTERVIEW_CONTEXT` when grading — the user's stated intentions matter.
+7. **Comparison phase**: Compare current grades against previous audit. Identify fixed issues, regressions, and outstanding items.
+8. **Report phase**: Generate the Markdown report (including interview summary and progress comparison), save it to the `squadits` directory, and print it.
+
+**Important rules:**
+- Never modify any project files (read-only audit).
+- Skip `node_modules`, `.next`, `.git`, `dist`, `build`, `coverage` directories, plus any user-specified skip directories from the interview.
+- For very large projects (2000+ files), sample representative files from each directory rather than reading every file. Note in the report that sampling was used.
+- Be specific in findings. Always include file paths and line numbers where possible.
+- Write all feedback in plain, beginner-friendly language. Avoid jargon. If you must use a technical term, explain it in parentheses.
+- Order feedback within each category from easiest fix to hardest fix.
+- Assume Vercel hosting. Do not flag the absence of rate limiting, DDOS protection, or other Vercel-native platform features.
+- When grading Directory Organization, weight the user's intended architecture heavily. If they told you how they want it organized, grade against that vision.
+- When the UI Library category is active, be specific about replacements. Don't just say "use the library" — name the exact component, the exact props, and show a brief code example.
+- Adjust grading leniency based on project stage from the interview: prototypes get more leniency than production apps.
