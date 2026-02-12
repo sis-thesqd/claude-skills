@@ -8,6 +8,12 @@ When the user runs `/squadit` or asks to "audit", "review", or "grade" a Next.js
 
 ## Inputs
 - `PROJECT_PATH`: The root directory of the Next.js project to audit. Ask the user if not obvious.
+- `CONTEXT` (optional): Free-form notes from the user to guide the audit. After confirming the project path, always ask: **"Any context I should know before auditing? For example: UI libraries in use, files/directories to ignore, recent migrations, known tech debt, or anything else."** If the user provides context, apply it throughout the audit. Examples of what context might include:
+  - UI component libraries (e.g., "We use shadcn/ui" — don't flag those component files for style inconsistency or refactoring)
+  - Files or directories to skip (e.g., "Ignore `src/generated/`" — exclude from all categories)
+  - Known tech debt (e.g., "We know the auth flow is messy, focusing on dashboard next" — still audit it but acknowledge it's known)
+  - Architecture decisions (e.g., "We intentionally co-locate components with routes" — don't flag as disorganized)
+  - In-progress migrations (e.g., "Migrating from Pages Router to App Router" — grade leniently on having both)
 
 ## Assumptions
 - All projects are deployed on **Vercel**. Do NOT flag anything that Vercel handles natively as a platform feature, including: rate limiting, DDOS protection, edge caching, CDN distribution, SSL/TLS, and serverless function isolation. Focus only on what the developer controls in their code.
@@ -216,6 +222,7 @@ Generate a Markdown report with this structure:
 **Structure:** [Single App / Monorepo]
 **Hosting:** Vercel
 **Scope:** [X] files | [Y] lines of code
+**User Context:** [print the user's context verbatim here, or "None provided" if skipped]
 
 ---
 
@@ -343,11 +350,12 @@ This is your action plan. Start at the top and work your way down.
 When running this audit, follow this order:
 
 1. **History phase**: Check for previous audits in `squadits/` directory. Parse grades from the most recent audit to use as comparison baseline. If multiple audits exist, collect all historical grades for the trend table.
-2. **Discovery phase**: Detect framework, router, monorepo, count files/lines. Report estimate, mention how many previous audits were found, and ask to continue.
-3. **Read phase**: Read all relevant source files systematically. Start with the project structure (directory listing), then read files grouped by category relevance.
-4. **Analysis phase**: For each category, collect findings and assign a grade.
-5. **Comparison phase**: Compare current grades against previous audit. Identify fixed issues, regressions, and outstanding items.
-6. **Report phase**: Generate the Markdown report (including progress comparison), save it to the `squadits` directory, and print it.
+2. **Context phase**: Ask the user for optional free-form context. If provided, note any files/directories to skip, libraries to account for, or leniency to apply. Carry this context into every subsequent phase.
+3. **Discovery phase**: Detect framework, router, monorepo, count files/lines (excluding any user-specified skip paths). Report estimate, mention how many previous audits were found, and ask to continue.
+4. **Read phase**: Read all relevant source files systematically. Start with the project structure (directory listing), then read files grouped by category relevance.
+5. **Analysis phase**: For each category, collect findings and assign a grade.
+6. **Comparison phase**: Compare current grades against previous audit. Identify fixed issues, regressions, and outstanding items.
+7. **Report phase**: Generate the Markdown report (including progress comparison), save it to the `squadits` directory, and print it.
 
 **Important rules:**
 - Never modify any project files (read-only audit).
